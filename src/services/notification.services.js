@@ -152,10 +152,10 @@ class NotificationFactory {
 
     }
     selectNotificationType(notificationData, listSocket) {
-        if (notificationData.typeNotify == NOTIFY_TYPES_OBJ.RequestFollowing) {
+        if (notificationData.typeNotify == NOTIFY_TYPES_OBJ.friendRequest) {
             return new FollowRequestNotifyCreator(notificationData, listSocket).createNotification()
         }
-        else if (notificationData.typeNotify == NOTIFY_TYPES_OBJ.AcceptFollowing) {
+        else if (notificationData.typeNotify == NOTIFY_TYPES_OBJ.acceptedRequest) {
             return new AcceptFollowingNotifyCreator(notificationData, listSocket).createNotification()
         }
         else {
