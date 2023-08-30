@@ -1,6 +1,8 @@
 const mongoose = require ('mongoose')
+require('dotenv').config()
 
-const uriConnection = `mongodb://localhost:27017/`
+const uriConnection = `mongodb://localhost:27017/${process.env.MONGODB_DB_NAME}`
+
 let options = {
     maxPoolSize: 50
 }

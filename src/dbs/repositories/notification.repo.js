@@ -107,6 +107,20 @@ class NotifyRepo {
         }
         
     }
+
+    async getListNotifies(userId, status = null)
+    {
+        var filter = {
+            "receiver.userId" : userId,
+        }
+        if(status){
+            filter["status"] = status
+        }
+        const listNotify = await notifyModel.find(filter).sort({createdAt: -1})
+
+        console.log(listNotify)
+        return listNotify
+    }
 }
 
 module.exports = {NotifyContent, NotifyRepo}
