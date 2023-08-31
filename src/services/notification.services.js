@@ -1,6 +1,4 @@
-const { send } = require("express/lib/response");
-const { NOTIFY_TYPES_OBJ } = require("../config/configurations")
-const mongoose = require ('mongoose')
+const { NOTIFICATION_CONFIG } = require("../config/configurations")
 const {NotifyContent, NotifyRepo} = require('../dbs/repositories/notification.repo')
 
 class NotificationAbstract {
@@ -152,10 +150,10 @@ class NotificationFactory {
 
     }
     selectNotificationType(notificationData, listSocket) {
-        if (notificationData.typeNotify == NOTIFY_TYPES_OBJ.friendRequest) {
+        if (notificationData.typeNotify == NOTIFICATION_CONFIG?.TYPES?.friendRequest) {
             return new FollowRequestNotifyCreator(notificationData, listSocket).createNotification()
         }
-        else if (notificationData.typeNotify == NOTIFY_TYPES_OBJ.acceptedRequest) {
+        else if (notificationData.typeNotify == NOTIFICATION_CONFIG?.TYPES?.acceptedRequest) {
             return new AcceptFollowingNotifyCreator(notificationData, listSocket).createNotification()
         }
         else {

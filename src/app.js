@@ -4,9 +4,8 @@ const cors = require('cors');
 const WebSocketServer = require("./services/sockets.services")
 const MongoDbManager = require("./dbs/init.mongodb")
 const RabbitMq = require("./services/rabbitMq.services")
-const {LIST_EXCHANGE, NOTIFY_QUEUE} = require("./config/configurations") 
 const {NotifyRepo} = require('./dbs/repositories/notification.repo')
-
+const {NOTIFICATION_CONFIG} = require("./config/configurations")
 require('dotenv').config()
 
 const app = express()
@@ -19,8 +18,8 @@ app.use(cors());
 // init db
 const mongoDbInstance = MongoDbManager.getInstance()
 
-// init rabbit mq for testing
-const rabbitMqInstance = RabbitMq.getInstance(LIST_EXCHANGE.notify, NOTIFY_QUEUE.notify, [])
+
+RabbitMq.getInstance(NOTIFICATION_CONFIG?.EXCHANGES?.notify, NOTIFICATION_CONFIG?.NOTIFY_QUEUES?.notify, [])
 
 app.get('/notifies/:userId', async (req, res, next) => {
     const status = req.query.status
