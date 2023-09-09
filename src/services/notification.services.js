@@ -47,7 +47,7 @@ class NotificationAbstract {
             else
             {
                 
-                this.listSocket[destinationSocket].emit(notifyContent.metaData.typeNotify, notifyContent, (ack) => 
+                this.listSocket[destinationSocket].emit(notifyContent.typeNotify, notifyContent, (ack) => 
                 {
                     if (ack == 'received')
                     {
