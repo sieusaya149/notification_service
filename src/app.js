@@ -30,6 +30,22 @@ app.get('/notifies/:userId', async (req, res, next) => {
     res.status(200).json({data: data})
 })
 
+app.put('/receivedApi/:userId', async (req, res, next) => {
+    const repo = NotifyRepo.getInstance()
+    const userId = req.params.userId
+    const data = await repo.allNotifyWasReceived(userId)
+    res.status(200).json({data: data})
+})
+
+app.put('/readNotify/:notifyId', async (req, res, next) => {
+    const repo = NotifyRepo.getInstance()
+    const notifyId = req.params.notifyId
+    const data = await repo.readNotify(notifyId)
+    res.status(200).json({data: data})
+})
+
+
+
 process.on('SIGINT', () => {
     mongoDbInstance.disconnect()
     .then(() => {
