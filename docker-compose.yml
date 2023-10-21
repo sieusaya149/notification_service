@@ -1,9 +1,7 @@
 version: '3'
 services:
   notification_service:
-      build: 
-        context: .
-        dockerfile: Dockerfile
+      image: hunghoang149/blog_notify:v0
       ports: 
         - 3002:3002
       container_name: notification_backend
