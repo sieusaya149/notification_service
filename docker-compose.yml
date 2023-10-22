@@ -1,7 +1,7 @@
 version: '3'
 services:
   notification_service:
-      image: hunghoang149/blog_notify:v0
+      image: hunghoang149/blog_notify:v1
       ports: 
         - 3002:3002
       container_name: notification_backend
