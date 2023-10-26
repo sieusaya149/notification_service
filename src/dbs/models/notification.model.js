@@ -1,6 +1,7 @@
 const mongoose = require ('mongoose')
 // https://mongoosejs.com/docs/schematypes.html
-const {NOTIFY_TYPES, STATUS_NOTIFYS} = require('../../config/configurations')
+const {NOTIFICATION_CONFIG, STATUS_NOTIFYS} = require('../../config/configurations')
+const NOTIFY_TYPES = Object.keys(NOTIFICATION_CONFIG?.TYPES)
 const DOCUMENT_NAME = 'Notifications';
 const COLLECTION_NAME = 'Notifications';
 const notificationSchema = new mongoose.Schema({

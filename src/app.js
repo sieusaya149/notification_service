@@ -4,9 +4,8 @@ const cors = require('cors');
 const WebSocketServer = require("./services/sockets.services")
 const MongoDbManager = require("./dbs/init.mongodb")
 const RabbitMq = require("./services/rabbitMq.services")
-const {LIST_EXCHANGE, NOTIFY_QUEUE} = require("./config/configurations") 
 const {NotifyRepo} = require('./dbs/repositories/notification.repo')
-
+const {NOTIFICATION_CONFIG} = require("./config/configurations")
 require('dotenv').config()
 
 const app = express()
@@ -19,8 +18,8 @@ app.use(cors());
 // init db
 const mongoDbInstance = MongoDbManager.getInstance()
 
-// init rabbit mq for testing
-const rabbitMqInstance = RabbitMq.getInstance(LIST_EXCHANGE.notify, NOTIFY_QUEUE.notify, [])
+
+RabbitMq.getInstance(NOTIFICATION_CONFIG?.EXCHANGES?.notify, NOTIFICATION_CONFIG?.NOTIFY_QUEUES?.notify, [])
 
 app.get('/notifies/:userId', async (req, res, next) => {
     const status = req.query.status
@@ -30,6 +29,22 @@ app.get('/notifies/:userId', async (req, res, next) => {
     const data = await repo.getListNotifies(userId, status)
     res.status(200).json({data: data})
 })
+
+app.put('/receivedApi/:userId', async (req, res, next) => {
+    const repo = NotifyRepo.getInstance()
+    const userId = req.params.userId
+    const data = await repo.allNotifyWasReceived(userId)
+    res.status(200).json({data: data})
+})
+
+app.put('/readNotify/:notifyId', async (req, res, next) => {
+    const repo = NotifyRepo.getInstance()
+    const notifyId = req.params.notifyId
+    const data = await repo.readNotify(notifyId)
+    res.status(200).json({data: data})
+})
+
+
 
 process.on('SIGINT', () => {
     mongoDbInstance.disconnect()

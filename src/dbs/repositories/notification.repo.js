@@ -1,3 +1,4 @@
+const { STATUS_NOTIFYS } = require('../../config/configurations')
 const notifyModel = require('../models/notification.model')
 
 
@@ -117,9 +118,64 @@ class NotifyRepo {
             filter["status"] = status
         }
         const listNotify = await notifyModel.find(filter).sort({createdAt: -1})
+        console.log(listNotify)
 
+         // Initialize counters for "Pending" and "Received" notifications
+        let numberPending = 0;
+        let numberReceived = 0;
+        let numberRead = 0;
+        // Update the status of the notifications in the list
+        for (const notification of listNotify) {
+            if (notification.status === "Pending") {
+                numberPending++;
+            } else if (notification.status === "Received") {
+                numberReceived++;
+            }
+            else 
+            {
+                numberRead++
+            }
+        }
+        return {
+            data: listNotify,
+            numberPending,
+            numberReceived,
+            numberRead
+        }
+    }
+
+
+    async allNotifyWasReceived(userId)
+    {
+        var filter = {
+            "receiver.userId" : userId,
+            "status": "Pending"
+        }
+
+        const updateDoc = {
+            $set: {
+                status: "Received"
+            },
+        };
+        const listNotify = await notifyModel.updateMany(filter, updateDoc)
         console.log(listNotify)
         return listNotify
+    }
+
+    async readNotify(notifyId)
+    {
+        var filter = {
+            "_id" : notifyId
+        }
+
+        const updateDoc = {
+            $set: {
+                status: "Read"
+            },
+        };
+        const readNotify = await notifyModel.updateOne(filter, updateDoc)
+        console.log(readNotify)
+        return readNotify
     }
 }
 

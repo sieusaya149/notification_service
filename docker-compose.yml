@@ -1,0 +1,56 @@
+version: '3'
+services:
+  notification_service:
+      image: hunghoang149/blog_notify:v1
+      ports: 
+        - 3002:3002
+      container_name: notification_backend
+      volumes: 
+        - .:/app
+        - '/app/node_modules'
+      depends_on: 
+        - rabbitmq
+      networks:
+        blog_network:
+          aliases:
+          - notification_backend
+      command: sh -c "sleep 30 && npm run dev"
+
+  rabbitmq:
+    image: "rabbitmq:3.9-management"
+    environment:
+    - RABBITMQ_DEFAULT_USER=hunghoang
+    - RABBITMQ_DEFAULT_PASS=123
+    ports:
+      - "5672:5672"  # AMQP port
+      - "15672:15672"  # RabbitMQ management UI
+    networks:
+      blog_network:
+        aliases:
+        - rabbitmq
+    restart: always
+      
+
+  mongodb:
+    image: "mongo:4.4.6"
+    ports:
+      - "27020:27017"
+    volumes:
+      - mongodbdata:/data/db
+    networks:
+      blog_network:
+        aliases:
+        - mongodb
+    restart: always
+
+volumes:
+  mongodbdata:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './data'
+
+networks:
+  blog_network:
+    external: true
